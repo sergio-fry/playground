@@ -38,11 +38,16 @@
       lang: "ruby"
     }
 
-    if (window.location.hash) {
-      var restored_state = JSON.parse(atob(window.location.hash.substring(1)));
+    if(window.location.hash.substring(1)) {
+      try {
+        var restored_state = JSON.parse(atob(window.location.hash.substring(1)));
 
-      state.code = restored_state.code || state.code;
-      state.lang = restored_state.lang || state.lang;
+        state.code = restored_state.code || state.code;
+        state.lang = restored_state.lang || state.lang;
+      } catch (e) {
+        console.error(e)
+        alert("Failed to load code...")
+      }
     }
 
     var editor = CodeMirror.fromTextArea(
