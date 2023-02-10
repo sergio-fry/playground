@@ -13,8 +13,10 @@
     <h1>Playground</h1>
 
 
+    <select class="form-select form-select-sm mb-3" aria-label=".form-select-sm">
+      <option selected>ruby</option>
+    </select>
     <div class="mb-3">
-      <label for="code" class="form-label">Code</label>
       <textarea class="form-control" id="code" rows="20" autofocus="autofocus"></textarea>
     </div>
 
@@ -31,23 +33,36 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Base64/1.1.0/base64.min.js" integrity="sha512-gysqkfMGKYvQSEPi68aIzL4ffmrQ0I6azOoPJ+ocle8k1bblsHJh7QVVoy4HHQG2iPzvFmRbs81d8kkVSyCkjA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
   <script>
+    var state = {
+      code: "puts 'Hello world!'",
+      lang: "ruby"
+    }
+
+    if (window.location.hash) {
+      var restored_state = JSON.parse(atob(window.location.hash.substring(1)));
+
+      state.code = restored_state.code || state.code;
+      state.lang = restored_state.lang || state.lang;
+    }
+
     var editor = CodeMirror.fromTextArea(
       document.getElementById('code'), {
         theme: 'gruvbox-dark',
         tabSize: 2,
         lineWrapping: true,
         lineNumbers: true,
-        mode: 'ruby',
+        mode: state.lang
       }
     );
 
-    editor.on('changes', function() {
-      window.location.hash = btoa(editor.getValue());
-    });
+    editor.setValue(state.code);
 
-    if (window.location.hash) {
-      editor.setValue(atob(window.location.hash.substring(1)))
-    }
+    editor.on('changes', function() {
+      window.location.hash = btoa(JSON.stringify({
+        code: editor.getValue(),
+        lang: 'ruby'
+      }));
+    });
   </script>
 </body>
 </html>
