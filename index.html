@@ -12,62 +12,99 @@
   <div class="container-fluid">
     <h1>Playground</h1>
 
-
     <select class="form-select form-select-sm mb-3" aria-label=".form-select-sm">
       <option selected>ruby</option>
     </select>
+
+    saved at <a href="#" id="permalink"></a>
+
     <div class="mb-3">
       <textarea class="form-control" id="code" rows="20" autofocus="autofocus"></textarea>
     </div>
 
     <div class="mb-3">
-      <a href="https://github.com/sergio-fry/playground">source</a>
+      <a href="https://github.com/sergio-fry/playground">github</a>
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.js" integrity="sha512-8RnEqURPUc5aqFEN04aQEiPlSAdE0jlFS/9iGgUyNtwFnSKCXhmB6ZTNl7LnDtDWKabJIASzXrzD0K+LYexU9g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/ruby/ruby.min.js" integrity="sha512-kIWQdD2Oq6DBWghYgnP6MpRMCuPxBvSI8/UBo7yxVm1blEPnNxVkwypVXky2KmIUgN2oNN7yd5TCeXJ48e867A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/python/python.min.js" integrity="sha512-2M0GdbU5OxkGYMhakED69bw0c1pW3Nb0PeF3+9d+SnwN1ryPx3wiDdNqK3gSM7KAU/pEV+2tFJFbMKjKAahOkQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/hint/anyword-hint.min.js" integrity="sha512-wdYOcbX/zcS4tP3HEDTkdOI5UybyuRxJMQzDQIRcafRLY/oTDWyXO+P8SzuajQipcJXkb2vHcd1QetccSFAaVw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Base64/1.1.0/base64.min.js" integrity="sha512-gysqkfMGKYvQSEPi68aIzL4ffmrQ0I6azOoPJ+ocle8k1bblsHJh7QVVoy4HHQG2iPzvFmRbs81d8kkVSyCkjA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
   <script>
-    var state = {
+    function load_script(src,callback ) {
+      var s = document.createElement('script');
+      s.setAttribute('src', src);
+      s.onload=callback;
+      document.body.appendChild(s);
+    }
+
+    function load_state(state) {
+      if(window.location.hash.substring(1)) {
+        try {
+          var restored_state = JSON.parse(atob(window.location.hash.substring(1)));
+
+          state.code = restored_state.code || state.code;
+          state.lang = restored_state.lang || state.lang;
+        } catch (e) {
+          console.error(e)
+          alert("Failed to load code...")
+        }
+      }
+
+      return state;
+    }
+
+    function init_editor(state) {
+      var editor = CodeMirror.fromTextArea(
+        document.getElementById('code'), {
+          theme: 'gruvbox-dark',
+          tabSize: 2,
+          lineWrapping: true,
+          lineNumbers: true,
+          mode: state.lang
+        }
+      );
+
+      editor.setValue(state.code);
+      update_permalink();
+
+      editor.on('changes', function() {
+        window.location.hash = btoa(JSON.stringify({
+          code: editor.getValue(),
+          lang: 'ruby'
+        }));
+
+        update_permalink();
+      });
+
+      return editor;
+    }
+
+    function update_permalink() {
+      var permalink = document.getElementById('permalink')
+
+      permalink.setAttribute('href', window.location.href);
+
+      var time = new Date();
+      permalink.textContent = ("0" + time.getHours()).slice(-2) + ":" + ("0" + time.getMinutes()).slice(-2);
+
+    }
+
+    var state = load_state({
       code: "puts 'Hello world!'",
       lang: "ruby"
-    }
+    })
 
-    if(window.location.hash.substring(1)) {
-      try {
-        var restored_state = JSON.parse(atob(window.location.hash.substring(1)));
 
-        state.code = restored_state.code || state.code;
-        state.lang = restored_state.lang || state.lang;
-      } catch (e) {
-        console.error(e)
-        alert("Failed to load code...")
-      }
-    }
+    init_editor(state)
 
-    var editor = CodeMirror.fromTextArea(
-      document.getElementById('code'), {
-        theme: 'gruvbox-dark',
-        tabSize: 2,
-        lineWrapping: true,
-        lineNumbers: true,
-        mode: state.lang
-      }
-    );
-
-    editor.setValue(state.code);
-
-    editor.on('changes', function() {
-      window.location.hash = btoa(JSON.stringify({
-        code: editor.getValue(),
-        lang: 'ruby'
-      }));
-    });
   </script>
 </body>
 </html>
