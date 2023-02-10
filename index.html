@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Playground</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.css" integrity="sha512-uf06llspW44/LZpHzHT6qBOIVODjWtv4MxCricRxkzvopAlSWnTf6hpZTFxuuZcuNE9CBQhqE0Seu1CoRk84nQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/theme/gruvbox-dark.min.css" integrity="sha512-FLFAEkNiUCQXE4MNOd7SrEzeNFEhiCnNYsa1S3sNMZDTNFJgPy42giNLGGJ+Rjbce5L6ICJXtlv6Ue61FFIqqw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+  <div class="container-fluid">
+    <h1>Playground</h1>
+
+
+    <div class="mb-3">
+      <label for="code" class="form-label">Code</label>
+      <textarea class="form-control" id="code" rows="20" autofocus="autofocus"></textarea>
+    </div>
+
+    <div class="mb-3">
+      Built with: <a href="https://codemirror.net">CodeMirror</a>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.js" integrity="sha512-8RnEqURPUc5aqFEN04aQEiPlSAdE0jlFS/9iGgUyNtwFnSKCXhmB6ZTNl7LnDtDWKabJIASzXrzD0K+LYexU9g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/ruby/ruby.min.js" integrity="sha512-kIWQdD2Oq6DBWghYgnP6MpRMCuPxBvSI8/UBo7yxVm1blEPnNxVkwypVXky2KmIUgN2oNN7yd5TCeXJ48e867A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/hint/anyword-hint.min.js" integrity="sha512-wdYOcbX/zcS4tP3HEDTkdOI5UybyuRxJMQzDQIRcafRLY/oTDWyXO+P8SzuajQipcJXkb2vHcd1QetccSFAaVw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Base64/1.1.0/base64.min.js" integrity="sha512-gysqkfMGKYvQSEPi68aIzL4ffmrQ0I6azOoPJ+ocle8k1bblsHJh7QVVoy4HHQG2iPzvFmRbs81d8kkVSyCkjA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <script>
+    var editor = CodeMirror.fromTextArea(
+      document.getElementById('code'), {
+        theme: 'gruvbox-dark',
+        tabSize: 2,
+        lineWrapping: true,
+        lineNumbers: true,
+        mode: 'ruby',
+      }
+    );
+
+    editor.on('changes', function() {
+      window.location.hash = btoa(editor.getValue());
+    });
+
+    if (window.location.hash) {
+      editor.setValue(atob(window.location.hash.substring(1)))
+    }
+  </script>
+</body>
+</html>
