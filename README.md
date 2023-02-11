@@ -2,7 +2,7 @@
 
 Type code without execution online. CodeMirror is used as editor.
 
-[Try it out!](https://sergio-fry.github.io/playground/#cHV0cyAnSGVsbG8gd29ybGQhJw==)
+[Try it out!](https://sergio-fry.github.io/playground/#eyJjb2RlIjoicHV0cyAnSGVsbG8gd29ybGQhJyIsImxhbmciOiJydWJ5In0=)
 
 
 ## Features
