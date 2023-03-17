@@ -28,7 +28,7 @@ const updatedAt = computed(() => {
 const onChange = debounce((val) => {
   state.timestamp = new Date();
   window.location.hash = btoa(JSON.stringify(state))
-}, 2000)
+}, 500)
 
 const restoreState = () => {
   var restored_state = {}
