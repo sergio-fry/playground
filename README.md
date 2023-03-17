@@ -22,3 +22,7 @@ Build with `npm run build`
 Run locally `npm run preview`
 
 Open in browser [localhost:4173](http://localhost:4173/)
+
+## Deploy
+
+`make deploy`
