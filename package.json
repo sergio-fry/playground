@@ -1,0 +1,27 @@
+{
+  "name": "playground",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@codemirror/legacy-modes": "^6.3.1",
+    "@codemirror/theme-one-dark": "^6.1.1",
+    "@vueuse/core": "^9.13.0",
+    "bootstrap": "^5.2.3",
+    "codemirror": "^6.0.1",
+    "codemirror-lang-elixir": "^3.0.0",
+    "moment": "^2.29.4",
+    "vue": "^3.2.45",
+    "vue-codemirror": "^6.1.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.0.0",
+    "sass": "^1.58.3",
+    "vite": "^4.1.0"
+  }
+}
