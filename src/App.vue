@@ -2,10 +2,12 @@
 import { ref, watch, computed, reactive } from 'vue'
 import { Codemirror } from 'vue-codemirror'
 import { oneDark } from '@codemirror/theme-one-dark'
+import { vim } from "@replit/codemirror-vim"
 import { useBrowserLocation } from '@vueuse/core'
 import debounce from './helpers/debounce'
 import moment from 'moment'
 import LangList from './components/LangList.vue'
+import ModeList from './components/ModeList.vue'
 
 const location = useBrowserLocation()
 
@@ -13,7 +15,8 @@ const state = reactive(
   {
     code: '',
     lang: '',
-    timestamp: null
+    timestamp: null,
+    mode: 'normal'
   }
 )
 
@@ -39,11 +42,16 @@ const restoreState = () => {
 
   Object.keys(state).forEach((key) => {
     state[key] = restored_state[key] || state[key]
+    console.log(key, state[key])
   })
 }
 
-const setExtensions = (language) => {
+const setLanguage = (language) => {
   extensions.value = [oneDark, language]
+}
+
+const setMode = (mode) => {
+  extensions.value = [extensions.value[0], extensions.value[1], vim()]
 }
 
 watch(location, () => {
@@ -58,7 +66,8 @@ restoreState()
 
   <header>
     <div class="container h-100 d-flex align-items-center">
-      <LangList v-model="state.lang" @onLoadLanguage="setExtensions" />
+      <LangList v-model="state.lang" @onLoadLanguage="setLanguage" />
+      <ModeList v-model="state.mode" @onLoadMode="setMode" />
       <div class="ms-auto" v-if="updatedAt">
         updated at {{updatedAt}}
       </div>
